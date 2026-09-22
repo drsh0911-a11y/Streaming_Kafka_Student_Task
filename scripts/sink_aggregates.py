@@ -18,10 +18,10 @@ cursor.execute("""
 """)
 db.commit()
 
-# Connect to Kafka consumer for window counts
+# Connect to Kafka consumer for window counts (using internal Docker network port 29092)
 consumer = KafkaConsumer(
     'ward_alert_counts',
-    bootstrap_servers=['localhost:9092'],
+    bootstrap_servers=['kafka:29092'],
     auto_offset_reset='earliest',
     enable_auto_commit=True,
     group_id='db-aggregate-sink-group',
