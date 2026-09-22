@@ -4,7 +4,7 @@ import time
 from kafka import KafkaProducer
 
 producer = KafkaProducer(
-   bootstrap_servers=['kafka:9092'],
+    bootstrap_servers=['kafka:29092'],
     value_serializer=lambda v: json.dumps(v).encode('utf-8'),
     key_serializer=lambda k: k.encode('utf-8')
 )

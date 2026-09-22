@@ -24,27 +24,36 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "29092"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   producer:
     build: .
     command: python scripts/producer.py
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
 
   processor:
     build: .
     command: python scripts/processor.py
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
 
   sink-db:
     build: .
     command: python scripts/sink_to_db.py
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
 
   sink-aggregates:
     build: .
     command: python scripts/sink_aggregates.py
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
